@@ -1,0 +1,118 @@
+String spielfeld = "|   |   |   |\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n|   |   |   |\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n|   |   |   |";
+    String Arrray[][] = new String[3][3];
+    boolean fertig= false;
+    String sieger = "";
+    boolean fehler = false;
+    int spielzuege=1;
+
+    public b02.game.Tictactoe(){
+
+
+        System.out.print(spielfeld);
+
+    }
+
+    public void resetSpiel(){
+        Arrray = new String[3][3];
+        fertig= false;
+        fehler=false;
+        spielzuege=1;
+        sieger = "";
+    }
+    public void spielzug(int pos1, int pos2, String zeichen){
+        try {
+            if(fehler){
+                System.out.println("Spielzug nicht möglich, da bereits ein fataler Fehler aufgetreten ist.");
+            }
+            else if (zeichen != "x" && zeichen != "o")
+                System.out.println("Ungültiges Zeichen.");
+
+            else if (Arrray[pos1 - 1][pos2 - 1] == "x" || Arrray[pos1 - 1][pos2 - 1] == "o")
+                System.out.println("Ungültiger Spielzug.");
+            else {
+                Arrray[pos1 - 1][pos2 - 1] = zeichen;
+                spielzuege++;
+                erstelleSpielfeld();
+
+                if (fertig = checkFertig() || checkSieger() == "x" || checkSieger() == "o") {
+                    sieger = checkSieger();
+                    printSieger();
+                }
+
+
+            }
+        } catch(IndexOutOfBoundsException iofbe){
+            System.out.println("Fehler im "+spielzuege+". Spielzug: Überprüfen Sie die angegebenen Positionen. Sie scheinen nicht auf dem Spielfeld zu sein.");
+            fehler=true;
+        }
+    }
+    public void printSieger(){
+
+        if(sieger == " "){
+            System.out.println("Es ist ein Unentschieden!!");
+        }
+        else {
+            System.out.println("Spieler '" + sieger + "' hat gewonnen!!");
+        }
+        resetSpiel();
+    }
+
+    private void erstelleSpielfeld(){
+        spielfeld = "";
+        for(int i = 0; i<Arrray.length;i++){
+            spielfeld +="|";
+            for(int j = 0; j<Arrray[i].length;j++){
+                if(Arrray[i][j] == null)
+                    Arrray[i][j] = " ";
+                spielfeld += " "+Arrray[i][j]+" |";
+
+            }
+            spielfeld +="\n‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n";
+
+        }
+        char c = '\n';
+        int length = 25;
+        char[] chars = new char[length];
+        Arrays.fill(chars, c);
+        System.out.print(String.valueOf(chars));
+
+    }
+    public void printSpielfeld(){
+        if(!fehler)
+            System.out.print(spielfeld);
+    }
+
+    public boolean checkFertig(){
+        boolean finished = true;
+        for(int i = 0; i<Arrray.length;i++) {
+            for (int j = 0; j < Arrray[i].length; j++) {
+                if(Arrray[i][j] == " "){
+                    finished = false;
+                }
+            }
+        }
+        return finished;
+    }
+    public String checkSieger(){
+        String sieger ="";
+        if(Arrray[0][0] == Arrray[0][1] && Arrray[0][0] == Arrray[0][2]){
+            sieger = Arrray[0][0];
+        }else if(Arrray[1][0] == Arrray[1][1] && Arrray[1][0] == Arrray[1][2]){
+            sieger = Arrray[1][0];
+        }else if(Arrray[2][0] == Arrray[2][1] && Arrray[2][0] == Arrray[2][2]){
+            sieger = Arrray[2][0];
+        }else if(Arrray[0][0] == Arrray[1][0] && Arrray[0][0] == Arrray[2][0]){
+            sieger = Arrray[0][0];
+        }else if(Arrray[0][1] == Arrray[1][1] && Arrray[0][1] == Arrray[2][1]){
+            sieger = Arrray[0][1];
+        }else if(Arrray[0][2] == Arrray[1][2] && Arrray[0][2] == Arrray[2][2]){
+            sieger = Arrray[0][2];
+        }else if(Arrray[0][0] == Arrray[1][1] && Arrray[0][0] == Arrray[2][2]){
+            sieger = Arrray[0][0];
+        }else if(Arrray[0][2] == Arrray[1][1] && Arrray[0][2] == Arrray[2][0]){
+            sieger = Arrray[0][2];
+        }else{
+            sieger = " ";
+        }
+        return sieger;
+    }
